@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         btnDownload.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                userMessage.text = UserDataManager().getTotalUserCount().toString()
+                userMessage.text = UserDataManagerTwo().getTotalCount().toString()
             }
 
         }
