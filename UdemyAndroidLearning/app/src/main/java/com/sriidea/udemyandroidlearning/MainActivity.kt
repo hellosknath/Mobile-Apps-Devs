@@ -9,6 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -32,13 +35,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnDownload.setOnClickListener {
-            btnDownloadUserData()
+            CoroutineScope(Dispatchers.IO).launch {
+                btnDownloadUserData()
+            }
         }
 
     }
 
     private fun btnDownloadUserData() {
-        for (i in 1..20000000) {
+        for (i in 1..200000000) {
             Log.i(TAG, "Downloading user data $i in ${Thread.currentThread().name}")
         }
     }
