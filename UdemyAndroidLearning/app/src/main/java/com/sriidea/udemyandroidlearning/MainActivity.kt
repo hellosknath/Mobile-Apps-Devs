@@ -3,6 +3,7 @@ package com.sriidea.udemyandroidlearning
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,6 +26,17 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.setBackgroundColor(Color.BLACK)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MyRecyclerViewAdapter(fruitsList)
+        recyclerView.adapter = MyRecyclerViewAdapter(fruitsList) { selectedItem: Fruits ->
+            listItemClicked(selectedItem)
+        }
+    }
+
+    private fun listItemClicked(fruits: Fruits) {
+        Toast.makeText(
+            this@MainActivity,
+            "You Select ${fruits.name}, " +
+                    "Supplier ${fruits.supplier}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
