@@ -2,9 +2,11 @@ package com.sriidea.udemyandroidlearning
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,12 +18,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CoroutineScope(IO).launch {
+        CoroutineScope(Main).launch {
             Log.i(TAG, "onCreate: Calculation Started...")
-            val stock1 = async { getStock1() }
-            val stock2 = async { getStock2() }
+            val stock1 = async(IO) { getStock1() }
+            val stock2 = async(IO) { getStock2() }
             val totalValue = stock1.await() + stock2.await()
-            Log.i(TAG, "onCreate: Total is $totalValue")
+            Toast.makeText(
+                this@MainActivity,
+                "onCreate: Total is $totalValue",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
