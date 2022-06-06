@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -38,13 +39,21 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 btnDownloadUserData()
             }
+
         }
 
     }
 
-    private fun btnDownloadUserData() {
-        for (i in 1..200000000) {
-            Log.i(TAG, "Downloading user data $i in ${Thread.currentThread().name}")
+    private suspend fun btnDownloadUserData() {
+        for (i in 1..2000) {
+            for (j in 1..10) {
+                withContext(Dispatchers.Main) {
+                    var dt = ""
+                    dt += "$i x $j = ${i * j}\n"
+                    userMessage.text = dt
+                    Log.i(TAG, dt)
+                }
+            }
         }
     }
 }
