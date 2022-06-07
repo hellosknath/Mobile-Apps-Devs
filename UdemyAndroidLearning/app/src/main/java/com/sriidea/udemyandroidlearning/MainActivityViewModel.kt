@@ -2,6 +2,7 @@ package com.sriidea.udemyandroidlearning
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.model.User
 import com.sriidea.udemyandroidlearning.model.UserRepository
@@ -11,9 +12,15 @@ import kotlinx.coroutines.withContext
 
 class MainActivityViewModel : ViewModel() {
     private var userRepository = UserRepository()
-    var users: MutableLiveData<List<User>?> = MutableLiveData()
+    // var users: MutableLiveData<List<User>?> = MutableLiveData()
 
-    fun getUserData() {
+    // Live data builder systems
+    var users = liveData(Dispatchers.IO) {
+        val result = userRepository.getUser()
+        emit(result)
+    }
+
+    /*fun getUserData() {
         viewModelScope.launch {
             var result: List<User>? = null
             withContext(Dispatchers.IO) {
@@ -21,5 +28,5 @@ class MainActivityViewModel : ViewModel() {
             }
             users.value = result
         }
-    }
+    }*/
 }
