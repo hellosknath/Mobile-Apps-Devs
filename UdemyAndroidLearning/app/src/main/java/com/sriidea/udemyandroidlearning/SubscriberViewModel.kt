@@ -1,16 +1,28 @@
 package com.sriidea.udemyandroidlearning
 
+import android.text.TextUtils
+import android.widget.Toast
+import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.db.Subscriber
+import com.sriidea.udemyandroidlearning.db.SubscriberDao
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel() {
+class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel(), Observable {
 
     val subscribers = repository.subscribers
+
+    fun getSavesSubscribers() = liveData {
+        repository.subscribers.collect() {
+            emit(it)
+        }
+    }
 
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
@@ -54,5 +66,13 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
         viewModelScope.launch {
             repository.deleteAll()
         }
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
+    }
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
+    }
 
 }
