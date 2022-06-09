@@ -1,9 +1,9 @@
 package com.sriidea.udemyandroidlearning
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +13,6 @@ import com.sriidea.udemyandroidlearning.db.Subscriber
 import com.sriidea.udemyandroidlearning.db.SubscriberDao
 import com.sriidea.udemyandroidlearning.db.SubscriberDatabase
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
-import kotlinx.coroutines.flow.observeOn
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +31,13 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         initRecyclerView()
+
+        // all action to inform user through toast message
+        subscriberViewModel.message.observe(this, Observer { it ->
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun initRecyclerView() {

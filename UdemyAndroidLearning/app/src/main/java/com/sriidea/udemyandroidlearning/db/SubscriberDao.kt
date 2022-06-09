@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface SubscriberDao {
 
     @Insert
-    suspend fun insertSubsriber(subscriber: Subscriber): Long
+    suspend fun insertSubscriber(subscriber: Subscriber): Long
 
     @Update
     suspend fun updateSubscriber(subscriber: Subscriber)

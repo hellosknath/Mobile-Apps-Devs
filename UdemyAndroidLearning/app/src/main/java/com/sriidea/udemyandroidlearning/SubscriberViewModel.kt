@@ -1,9 +1,6 @@
 package com.sriidea.udemyandroidlearning
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sriidea.udemyandroidlearning.db.Subscriber
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
 import kotlinx.coroutines.Job
@@ -32,6 +29,12 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
 
     val saveOrUpdateBtnText = MutableLiveData<String>()
     val clearAllOrDeleteBtnText = MutableLiveData<String>()
+
+    /*    // is's mutable private live data., it's only access this class, and modify
+    * can not change this value others classes. only access message value*/
+    private val statusMessage = MutableLiveData<Event<String>>()
+    val message: LiveData<Event<String>>
+        get() = statusMessage
 
     // setting layout button text
     init {
@@ -66,6 +69,7 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
     fun insert(subscriber: Subscriber): Job =
         viewModelScope.launch {
             repository.insert(subscriber)
+            statusMessage.value = Event("Subscriber inserted successfully")
         }
 
     fun update(subscriber: Subscriber): Job =
@@ -80,6 +84,8 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
             isUpdateOrDelete = false
             saveOrUpdateBtnText.value = "Save"
             clearAllOrDeleteBtnText.value = "Clear All"
+
+            statusMessage.value = Event("Subscriber updated successfully")
         }
 
     fun delete(subscriber: Subscriber): Job =
@@ -94,11 +100,15 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
             isUpdateOrDelete = false
             saveOrUpdateBtnText.value = "Save"
             clearAllOrDeleteBtnText.value = "Clear All"
+
+            statusMessage.value = Event("Subscriber deleted successfully")
         }
 
     fun clearAll(): Job =
         viewModelScope.launch {
             repository.deleteAll()
+
+            statusMessage.value = Event("Subscribers cleared successfully")
         }
 
     /*changing update or delete button text and showing selected update or delete data to
