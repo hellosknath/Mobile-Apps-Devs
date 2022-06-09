@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sriidea.udemyandroidlearning.databinding.ListItemBinding
 import com.sriidea.udemyandroidlearning.db.Subscriber
 
-class MyRecyclerViewAdapter(private val subscriberList: List<Subscriber>) :
-    RecyclerView.Adapter<MyViewHolder>() {
+class MyRecyclerViewAdapter(
+    private val subscriberList: List<Subscriber>,
+/*    receive onclick listener data from main activity onclick functions*/
+    private val clickListener: (Subscriber) -> Unit
+) : RecyclerView.Adapter<MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ListItemBinding =
@@ -17,7 +20,7 @@ class MyRecyclerViewAdapter(private val subscriberList: List<Subscriber>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(subscriberList[position])
+        holder.bind(subscriberList[position], clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -25,9 +28,14 @@ class MyRecyclerViewAdapter(private val subscriberList: List<Subscriber>) :
     }
 }
 
+// setting data binding in MyViewModel constructor
 class MyViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(subscriber: Subscriber) {
+    fun bind(subscriber: Subscriber, clickListener: (Subscriber) -> Unit) {
         binding.tvName.text = subscriber.name
         binding.tvEmail.text = subscriber.email
+        binding.listItemLayout.setOnClickListener {
+            // passing on click listener data model
+            clickListener(subscriber)
+        }
     }
 }

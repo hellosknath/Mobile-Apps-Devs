@@ -1,50 +1,66 @@
 package com.sriidea.udemyandroidlearning
 
-import android.text.TextUtils
-import android.widget.Toast
-import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.db.Subscriber
-import com.sriidea.udemyandroidlearning.db.SubscriberDao
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel(), Observable {
+class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel() {
 
-    val subscribers = repository.subscribers
+    private val subscribers = repository.subscribers
 
+    // delete or update flag
+    private var isUpdateOrDelete = false
+
+    // update or delete subscriber model data
+    private lateinit var subscriberToUpdateOrDelete: Subscriber
+
+    // get all save subscriber data
     fun getSavesSubscribers() = liveData {
-        repository.subscribers.collect() {
+        subscribers.collect() {
             emit(it)
         }
     }
 
+    // getting user input
     val inputName = MutableLiveData<String>()
     val inputEmail = MutableLiveData<String>()
 
     val saveOrUpdateBtnText = MutableLiveData<String>()
     val clearAllOrDeleteBtnText = MutableLiveData<String>()
 
+    // setting layout button text
     init {
         saveOrUpdateBtnText.value = "Save"
         clearAllOrDeleteBtnText.value = "Clear All"
     }
 
     fun saveOrUpdate() {
-        val name: String = inputName.value!!
-        val email: String = inputEmail.value!!
-        insert(Subscriber(0, name, email))
-        inputName.value = ""
-        inputEmail.value = ""
+        // flag is true, update the value
+        if (isUpdateOrDelete) {
+            subscriberToUpdateOrDelete.name = inputName.value!!
+            subscriberToUpdateOrDelete.email = inputEmail.value!!
+            update(subscriberToUpdateOrDelete)
+        } else {
+            val name: String = inputName.value!!
+            val email: String = inputEmail.value!!
+            insert(Subscriber(0, name, email))
+            inputName.value = ""
+            inputEmail.value = ""
+        }
     }
 
     fun clearAllOrDelete() {
-        clearAll()
+        // if flag is true, single data delete, flag is false , then all data delete
+        if (isUpdateOrDelete) {
+            delete(subscriberToUpdateOrDelete)
+        } else {
+            clearAll()
+        }
     }
 
     fun insert(subscriber: Subscriber): Job =
@@ -55,11 +71,29 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
     fun update(subscriber: Subscriber): Job =
         viewModelScope.launch {
             repository.update(subscriber)
+
+            // when value is update, then input data are cleared
+            inputName.value = ""
+            inputEmail.value = ""
+
+            // after value update, then flag is false, button return save and cleared mode
+            isUpdateOrDelete = false
+            saveOrUpdateBtnText.value = "Save"
+            clearAllOrDeleteBtnText.value = "Clear All"
         }
 
     fun delete(subscriber: Subscriber): Job =
         viewModelScope.launch {
             repository.delete(subscriber)
+
+            // when delete data, then clear input field
+            inputName.value = ""
+            inputEmail.value = ""
+
+            // set flag to false and return mode to initial state
+            isUpdateOrDelete = false
+            saveOrUpdateBtnText.value = "Save"
+            clearAllOrDeleteBtnText.value = "Clear All"
         }
 
     fun clearAll(): Job =
@@ -67,11 +101,17 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
             repository.deleteAll()
         }
 
-    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+    /*changing update or delete button text and showing selected update or delete data to
+    edit text*/
+    fun initUpdateAndDelete(subscriber: Subscriber) {
+        inputName.value = subscriber.name
+        inputEmail.value = subscriber.email
 
-    }
-
-    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        // when selected update or delete action, then flag is true
+        isUpdateOrDelete = true
+        subscriberToUpdateOrDelete = subscriber
+        saveOrUpdateBtnText.value = "Update"
+        clearAllOrDeleteBtnText.value = "Delete"
 
     }
 
