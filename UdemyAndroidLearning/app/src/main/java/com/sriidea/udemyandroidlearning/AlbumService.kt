@@ -2,13 +2,18 @@ package com.sriidea.udemyandroidlearning
 
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
+import java.sql.RowId
 
 interface AlbumService {
 
     @GET("/albums")
-    suspend fun getAlbum(): Response<Albums>
+    suspend fun getAlbums(): Response<Albums>
 
     @GET("/albums")
     suspend fun getSortedAlbum(@Query("userId") userId: Int): Response<Albums>
+
+    @GET("/albums/{id}")
+    suspend fun getAlbum(@Path(value = "id") albumId: Int): Response<AlbumsItem>
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
@@ -23,6 +24,17 @@ class MainActivity : AppCompatActivity() {
             val response: Response<Albums> = restService.getSortedAlbum(3)
             emit(response)
         }
+
+        // path parameter example
+        val pathResponse: LiveData<Response<AlbumsItem>> = liveData {
+            val response: Response<AlbumsItem> = restService.getAlbum(3)
+            emit(response)
+        }
+
+        pathResponse.observe(this, Observer {
+            val title: String? = it.body()?.title
+            Toast.makeText(applicationContext, "Title: $title", Toast.LENGTH_SHORT).show()
+        })
 
         val textView: TextView = findViewById(R.id.textView)
         responseLiveData.observe(this, Observer {
