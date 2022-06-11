@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var subscriberViewModel: SubscriberViewModel
+    private lateinit var adapter: MyRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,10 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         // setting layout manager in recycler view
         binding.lvSubscriber.layoutManager = LinearLayoutManager(this)
+        adapter = MyRecyclerViewAdapter(
+        ) { selectedItem: Subscriber -> listItemClicked(selectedItem) }
+        binding.lvSubscriber.adapter = adapter
+
         displaySubscriberList()
     }
 
@@ -50,10 +55,7 @@ class MainActivity : AppCompatActivity() {
 /*        get all saved data from live data list on view model */
         subscriberViewModel.getSavesSubscribers().observe(this, Observer {
             Log.i(TAG, it.toString())
-            binding.lvSubscriber.adapter = MyRecyclerViewAdapter(
-                it.reversed()
-            ) { selectedItem: Subscriber -> listItemClicked(selectedItem) } /* passing listItemClicked functions
-            as a parameter to viewModel class */
+            adapter.setList(it)
         })
     }
 

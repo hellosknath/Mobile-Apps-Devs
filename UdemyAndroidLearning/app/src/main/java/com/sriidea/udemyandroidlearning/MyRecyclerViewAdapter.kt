@@ -8,10 +8,12 @@ import com.sriidea.udemyandroidlearning.databinding.ListItemBinding
 import com.sriidea.udemyandroidlearning.db.Subscriber
 
 class MyRecyclerViewAdapter(
-    private val subscriberList: List<Subscriber>,
 /*    receive onclick listener data from main activity onclick functions*/
     private val clickListener: (Subscriber) -> Unit
 ) : RecyclerView.Adapter<MyViewHolder>() {
+
+    private val subscriberList = ArrayList<Subscriber>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ListItemBinding =
@@ -25,6 +27,11 @@ class MyRecyclerViewAdapter(
 
     override fun getItemCount(): Int {
         return subscriberList.size
+    }
+
+    fun setList(subscribers: List<Subscriber>) {
+        subscriberList.clear()
+        subscriberList.addAll(subscribers)
     }
 }
 

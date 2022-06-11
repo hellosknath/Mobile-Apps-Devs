@@ -6,7 +6,6 @@ import com.sriidea.udemyandroidlearning.db.Subscriber
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 
 class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel() {
 
