@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
             .create(AlbumService::class.java)
 
         val responseLiveData: LiveData<Response<Albums>> = liveData {
-            val response: Response<Albums> = restService.getAlbum()
+            val response: Response<Albums> = restService.getSortedAlbum(3)
             emit(response)
         }
 
