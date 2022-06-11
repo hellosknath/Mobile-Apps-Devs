@@ -1,10 +1,12 @@
 package com.sriidea.udemyandroidlearning
 
+import android.util.Patterns
 import androidx.lifecycle.*
 import com.sriidea.udemyandroidlearning.db.Subscriber
 import com.sriidea.udemyandroidlearning.db.SubscriberRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 class SubscriberViewModel(private val repository: SubscriberRepository) : ViewModel() {
 
@@ -43,18 +45,28 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
     }
 
     fun saveOrUpdate() {
-        // flag is true, update the value
-        if (isUpdateOrDelete) {
-            subscriberToUpdateOrDelete.name = inputName.value!!
-            subscriberToUpdateOrDelete.email = inputEmail.value!!
-            update(subscriberToUpdateOrDelete)
-        } else {
-            val name: String = inputName.value!!
-            val email: String = inputEmail.value!!
-            insert(Subscriber(0, name, email))
-            inputName.value = ""
-            inputEmail.value = ""
+
+        if (inputName.value == null){
+            statusMessage.value = Event("Please enter your name")
+        }else if (inputEmail.value == null){
+            statusMessage.value = Event("Please enter your email address")
+        }else if (!Patterns.EMAIL_ADDRESS.matcher(inputEmail.value!!).matches()){
+            statusMessage.value = Event("Please enter your email address correct format")
+        }else{
+            // flag is true, update the value
+            if (isUpdateOrDelete) {
+                subscriberToUpdateOrDelete.name = inputName.value!!
+                subscriberToUpdateOrDelete.email = inputEmail.value!!
+                update(subscriberToUpdateOrDelete)
+            } else {
+                val name: String = inputName.value!!
+                val email: String = inputEmail.value!!
+                insert(Subscriber(0, name, email))
+                inputName.value = ""
+                inputEmail.value = ""
+            }
         }
+
     }
 
     fun clearAllOrDelete() {
@@ -127,8 +139,6 @@ class SubscriberViewModel(private val repository: SubscriberRepository) : ViewMo
             } else {
                 statusMessage.value = Event("Error Occurred")
             }
-
-
         }
 
     /*changing update or delete button text and showing selected update or delete data to
