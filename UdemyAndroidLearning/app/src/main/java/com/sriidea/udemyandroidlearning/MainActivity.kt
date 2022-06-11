@@ -3,6 +3,7 @@ package com.sriidea.udemyandroidlearning
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
@@ -23,15 +24,19 @@ class MainActivity : AppCompatActivity() {
             emit(response)
         }
 
+        val textView: TextView = findViewById(R.id.textView)
         responseLiveData.observe(this, Observer {
             val albumList: MutableListIterator<AlbumsItem>? = it.body()?.listIterator()
             if (albumList != null) {
                 while (albumList.hasNext()) {
                     val albumsItem: AlbumsItem = albumList.next()
-                    Log.i(TAG, "title: " + albumsItem.userId)
-                    Log.i(TAG, "title: " + albumsItem.id)
                     Log.i(TAG, "title: " + albumsItem.title)
-                    Log.i(TAG, "-----------------------------")
+                    val result: String =
+                        " " + "Album Title: ${albumsItem.title}" + "\n" +
+                                " " + "Album id: ${albumsItem.id}" + "\n" +
+                                " " + "user id: ${albumsItem.userId}" + "\n\n\n"
+                    textView.append(result)
+
                 }
             }
         })
