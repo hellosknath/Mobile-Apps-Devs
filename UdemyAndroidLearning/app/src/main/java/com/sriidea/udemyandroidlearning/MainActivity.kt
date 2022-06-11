@@ -12,17 +12,19 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var restService: AlbumService
+    private lateinit var textView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        textView = findViewById(R.id.textView)
         // getting album service instance
         restService = RetrofitInstance
             .getRetrofitInstance()
             .create(AlbumService::class.java)
 
-        getRequestWithQueryParameter()
-        getRequestWithPathParameter()
+//        getRequestWithQueryParameter()
+//        getRequestWithPathParameter()
+        uploadAlbum()
     }
 
     fun getRequestWithQueryParameter() {
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             emit(response)
         }
 
-        val textView: TextView = findViewById(R.id.textView)
+
         responseLiveData.observe(this, Observer {
             val albumList: MutableListIterator<AlbumsItem>? = it.body()?.listIterator()
             if (albumList != null) {
@@ -61,6 +63,22 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Title: $title", Toast.LENGTH_SHORT).show()
         })
 
+    }
+
+    private fun uploadAlbum() {
+        val album = AlbumsItem(0, "Srinath", 101)
+        val postRequest: LiveData<Response<AlbumsItem>> = liveData {
+            val response = restService.uploadAlbum(album)
+            emit(response)
+        }
+        postRequest.observe(this, Observer {
+            val received: AlbumsItem? = it.body()
+            val result: String =
+                " " + "Album Title: ${received?.title}" + "\n" +
+                        " " + "Album id: ${received?.id}" + "\n" +
+                        " " + "user id: ${received?.userId}" + "\n\n\n"
+            textView.text = result
+        })
     }
 
     companion object {
