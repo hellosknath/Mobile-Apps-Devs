@@ -8,7 +8,8 @@ import androidx.work.WorkerParameters
 class UploadWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
         return try {
-            for (i in 0..5000) {
+            val count: Int = inputData.getInt(MainActivity.KEY_COUNT_VALUE, 0)
+            for (i in 0 until count) {
                 Log.i(TAG, "Uploading $i")
             }
             Result.success()

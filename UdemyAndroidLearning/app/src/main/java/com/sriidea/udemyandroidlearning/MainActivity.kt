@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val KEY_COUNT_VALUE = "key_count_value"
+    }
+
     private lateinit var button: Button
     private lateinit var textView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun onetimeWorkRequest() {
         val workManager: WorkManager = WorkManager.getInstance(applicationContext)
+
+        val data: Data = Data.Builder()
+            .putInt(KEY_COUNT_VALUE, 500)
+            .build()
+
         val constraints = Constraints.Builder()
             .setRequiresCharging(true)
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -34,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val uploadRequest: OneTimeWorkRequest = OneTimeWorkRequest
             .Builder(UploadWorker::class.java)
             .setConstraints(constraints)
+            .setInputData(data)
             .build()
         workManager.enqueue(uploadRequest)
         workManager.getWorkInfoByIdLiveData(uploadRequest.id)
