@@ -37,11 +37,27 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        // action button
+        val intent2 = Intent(this, DetailsActivity::class.java)
+        val pendingIntent2: PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val action2: NotificationCompat.Action =
+            NotificationCompat.Action.Builder(
+                0,
+                "Details",
+                pendingIntent2
+            ).build()
+
         val notification = NotificationCompat.Builder(this@MainActivity, channelId)
             .setContentText("This is a demo notification")
             .setContentTitle("Demo Title")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setAutoCancel(true)
+            .addAction(action2)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
