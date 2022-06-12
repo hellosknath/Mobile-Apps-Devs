@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.work.*
 
@@ -47,6 +48,14 @@ class MainActivity : AppCompatActivity() {
         workManager.getWorkInfoByIdLiveData(uploadRequest.id)
             .observe(this, Observer {
                 textView.text = it.state.name
+
+                // receiving data from worker class
+                if (it.state.isFinished) {
+                    val data = it.outputData
+                    val message = data.getString(UploadWorker.KEY_WORKER)
+                    Toast.makeText(applicationContext, "$message", Toast.LENGTH_SHORT).show()
+                }
+
             })
     }
 }
