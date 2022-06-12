@@ -2,17 +2,14 @@ package com.sriidea.udemyandroidlearning
 
 import android.content.Context
 import android.util.Log
-import androidx.work.Data
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import java.text.SimpleDateFormat
-import java.util.*
 
-class Filtering(context: Context, params: WorkerParameters) : Worker(context, params) {
+class Downloading (context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
         return try {
-            for (i in 0..3000) {
-                Log.i(TAG, "Filtering $i")
+            for (i in 0..5000) {
+                Log.i(TAG, "Downloading $i")
             }
 
             Result.success()

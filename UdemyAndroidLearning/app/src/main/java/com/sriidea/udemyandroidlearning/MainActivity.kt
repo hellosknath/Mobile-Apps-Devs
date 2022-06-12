@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val workManager: WorkManager = WorkManager.getInstance(applicationContext)
 
         val data: Data = Data.Builder()
-            .putInt(KEY_COUNT_VALUE, 500)
+            .putInt(KEY_COUNT_VALUE, 5000)
             .build()
 
         val constraints = Constraints.Builder()
@@ -49,8 +49,13 @@ class MainActivity : AppCompatActivity() {
         val filteringRequest = OneTimeWorkRequest.Builder(Filtering::class.java).build()
         val compressingRequest = OneTimeWorkRequest.Builder(Compressing::class.java).build()
 
+        val downloadingRequest = OneTimeWorkRequest.Builder(Downloading::class.java).build()
+        val parallelWorker = mutableListOf<OneTimeWorkRequest>()
+        parallelWorker.add(downloadingRequest)
+        parallelWorker.add(filteringRequest)
+
         workManager
-            .beginWith(filteringRequest)
+            .beginWith(parallelWorker)
             .then(compressingRequest)
             .then(uploadRequest)
             .enqueue()

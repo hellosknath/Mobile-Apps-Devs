@@ -8,7 +8,7 @@ import androidx.work.WorkerParameters
 class Compressing(context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
         return try {
-            for (i in 0..300) {
+            for (i in 0..3000) {
                 Log.i(TAG, "Compressing $i")
             }
 
