@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.work.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         button = findViewById(R.id.button)
         textView = findViewById(R.id.textView)
         button.setOnClickListener {
-            onetimeWorkRequest()
+//            onetimeWorkRequest()
+            setPeriodicWorkRequest()
         }
     }
 
@@ -71,5 +73,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun setPeriodicWorkRequest(){
+        val periodicWorkRequest = PeriodicWorkRequest
+            .Builder(Downloading::class.java,16,TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(applicationContext).enqueue(periodicWorkRequest)
     }
 }
