@@ -44,7 +44,16 @@ class MainActivity : AppCompatActivity() {
             .setConstraints(constraints)
             .setInputData(data)
             .build()
-        workManager.enqueue(uploadRequest)
+
+        // create filtering and compressing class instance
+        val filteringRequest = OneTimeWorkRequest.Builder(Filtering::class.java).build()
+        val compressingRequest = OneTimeWorkRequest.Builder(Compressing::class.java).build()
+
+        workManager
+            .beginWith(filteringRequest)
+            .then(compressingRequest)
+            .then(uploadRequest)
+            .enqueue()
         workManager.getWorkInfoByIdLiveData(uploadRequest.id)
             .observe(this, Observer {
                 textView.text = it.state.name
