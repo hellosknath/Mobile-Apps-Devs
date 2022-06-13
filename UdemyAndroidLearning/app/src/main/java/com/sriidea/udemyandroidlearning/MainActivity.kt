@@ -9,10 +9,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Without using dependency injections
-        SmartPhone(Battery(), MemoryCard(), SIMCard(ServiceProvider()))
+   /*     SmartPhone(Battery(), MemoryCard(), SIMCard(ServiceProvider()))
             .makeCallWithRecording()
 
-
+*/
         // use dependency injection
         DaggerSmartPhoneComponent.create().getSmartPhone().makeCallWithRecording()
     }
