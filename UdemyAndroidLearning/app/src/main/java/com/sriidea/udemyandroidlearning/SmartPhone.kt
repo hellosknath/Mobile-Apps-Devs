@@ -1,8 +1,13 @@
 package com.sriidea.udemyandroidlearning
 
 import android.util.Log
+import javax.inject.Inject
 
-class SmartPhone(val battery: Battery, val memoryCard: MemoryCard, val simCard: SIMCard) {
+class SmartPhone @Inject constructor(
+    val battery: Battery,
+    val memoryCard: MemoryCard,
+    val simCard: SIMCard
+) {
 
     init {
         battery.getPower()

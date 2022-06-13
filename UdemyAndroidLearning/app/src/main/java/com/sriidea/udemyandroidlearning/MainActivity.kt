@@ -11,5 +11,9 @@ class MainActivity : AppCompatActivity() {
         // Without using dependency injections
         SmartPhone(Battery(), MemoryCard(), SIMCard(ServiceProvider()))
             .makeCallWithRecording()
+
+
+        // use dependency injection
+        DaggerSmartPhoneComponent.create().getSmartPhone().makeCallWithRecording()
     }
 }
