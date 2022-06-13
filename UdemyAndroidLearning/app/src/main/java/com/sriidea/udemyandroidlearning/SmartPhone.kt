@@ -2,7 +2,9 @@ package com.sriidea.udemyandroidlearning
 
 import android.util.Log
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SmartPhone @Inject constructor(
     val battery: Battery,
     val memoryCard: MemoryCard,

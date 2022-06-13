@@ -13,18 +13,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-/*        // use dependency injection
-        DaggerSmartPhoneComponent.create().inject(this)
-        smartPhone.makeCallWithRecording()
-        memoryCard.getSpaceAvailable()*/
-
-        /*  // using state of a module
-          DaggerSmartPhoneComponent.builder()
-              .memoryCardModules(MemoryCardModules(10000))
-              .build()
-              .inject(this)*/
 
         (application as SmartPhoneApplication).smartPhoneComponent.inject(this)
+        smartPhone.makeCallWithRecording()
 
     }
 }
