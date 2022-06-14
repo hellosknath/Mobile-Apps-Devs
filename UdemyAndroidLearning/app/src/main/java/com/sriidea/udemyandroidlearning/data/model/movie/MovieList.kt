@@ -1,4 +1,4 @@
-package com.sriidea.udemyandroidlearning.data
+package com.sriidea.udemyandroidlearning.data.model.movie
 
 import com.google.gson.annotations.SerializedName
 
