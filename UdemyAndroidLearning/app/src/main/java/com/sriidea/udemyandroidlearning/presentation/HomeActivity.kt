@@ -16,15 +16,15 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
        binding = DataBindingUtil.setContentView(this,R.layout.activity_home)
 
-        binding.artistBtn.setOnClickListener {
+        binding.artistsButton.setOnClickListener {
             val intent = Intent(this, ArtistActivity::class.java)
             startActivity(intent)
         }
-        binding.moviesBtn.setOnClickListener {
+        binding.movieButton.setOnClickListener {
             val intent = Intent(this, MoviesActivity::class.java)
             startActivity(intent)
         }
-        binding.tvBtn.setOnClickListener {
+        binding.tvButton.setOnClickListener {
             val intent = Intent(this, TVShowActivity::class.java)
             startActivity(intent)
         }
