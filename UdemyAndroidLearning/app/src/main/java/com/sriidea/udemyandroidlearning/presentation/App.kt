@@ -7,10 +7,9 @@ import com.sriidea.udemyandroidlearning.presentation.di.artist.ArtistSubComponen
 import com.sriidea.udemyandroidlearning.presentation.di.core.*
 import com.sriidea.udemyandroidlearning.presentation.di.movie.MovieSubComponent
 import com.sriidea.udemyandroidlearning.presentation.di.tvshow.TvShowSubComponent
-import dagger.internal.DaggerCollections
 
 class App : Application(), Injector {
-    private lateinit var appComponent: AppComponent
+private lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -19,6 +18,7 @@ class App : Application(), Injector {
             .netModule(NetModule(BuildConfig.BASE_URL))
             .remoteDataModule(RemoteDataModule(BuildConfig.API_KEY))
             .build()
+
     }
 
     override fun createMovieSubComponent(): MovieSubComponent {
@@ -26,10 +26,11 @@ class App : Application(), Injector {
     }
 
     override fun createTvShowSubComponent(): TvShowSubComponent {
-        return appComponent.tvShowSubComponent().create()
+       return appComponent.tvShowSubComponent().create()
     }
 
     override fun createArtistSubComponent(): ArtistSubComponent {
         return appComponent.artistSubComponent().create()
     }
+
 }

@@ -3,15 +3,15 @@ package com.sriidea.udemyandroidlearning.presentation.di.core
 import com.sriidea.udemyandroidlearning.data.repository.artist.ArtistRepositoryImpl
 import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistCacheDataSource
 import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistLocalDataSource
-import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistRemoteDataSource
-import com.sriidea.udemyandroidlearning.data.repository.movies.MovieRepositoryImpl
-import com.sriidea.udemyandroidlearning.data.repository.movies.datasource.MovieLocalDataSource
-import com.sriidea.udemyandroidlearning.data.repository.movies.datasource.MovieRemoteDataSource
-import com.sriidea.udemyandroidlearning.data.repository.movies.datasource.MoviesCacheDataSource
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.TvShowRepositoryImpl
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.datasource.TvShowCacheDataSource
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.datasource.TvShowLocalDataSource
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.datasource.TvShowRemoteDataSource
+import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistRemoteDatasource
+import com.sriidea.udemyandroidlearning.data.repository.movie.MovieRepositoryImpl
+import com.sriidea.udemyandroidlearning.data.repository.movie.datasource.MovieCacheDataSource
+import com.sriidea.udemyandroidlearning.data.repository.movie.datasource.MovieLocalDataSource
+import com.sriidea.udemyandroidlearning.data.repository.movie.datasource.MovieRemoteDatasource
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.TvShowRepositoryImpl
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.datasource.TvShowCacheDataSource
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.datasource.TvShowLocalDataSource
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.datasource.TvShowRemoteDatasource
 import com.sriidea.udemyandroidlearning.domain.repository.ArtistRepository
 import com.sriidea.udemyandroidlearning.domain.repository.MovieRepository
 import com.sriidea.udemyandroidlearning.domain.repository.TvShowRepository
@@ -25,43 +25,52 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideMovieRepository(
-        movieRemoteDataSource: MovieRemoteDataSource,
+        movieRemoteDatasource: MovieRemoteDatasource,
         movieLocalDataSource: MovieLocalDataSource,
-        moviesCacheDataSource: MoviesCacheDataSource
+        movieCacheDataSource: MovieCacheDataSource
     ): MovieRepository {
+
         return MovieRepositoryImpl(
-            movieRemoteDataSource,
+            movieRemoteDatasource,
             movieLocalDataSource,
-            moviesCacheDataSource
+            movieCacheDataSource
         )
+
+
     }
 
     @Provides
     @Singleton
     fun provideTvShowRepository(
-        tvShowRemoteDataSource: TvShowRemoteDataSource,
+        tvShowRemoteDatasource: TvShowRemoteDatasource,
         tvShowLocalDataSource: TvShowLocalDataSource,
         tvShowCacheDataSource: TvShowCacheDataSource
     ): TvShowRepository {
+
         return TvShowRepositoryImpl(
+            tvShowRemoteDatasource,
             tvShowLocalDataSource,
-            tvShowRemoteDataSource,
             tvShowCacheDataSource
         )
+
+
     }
 
     @Provides
     @Singleton
     fun provideArtistRepository(
-        artistCacheDataSource: ArtistCacheDataSource,
+        artistRemoteDatasource: ArtistRemoteDatasource,
         artistLocalDataSource: ArtistLocalDataSource,
-        artistRemoteDataSource: ArtistRemoteDataSource
+        artistCacheDataSource: ArtistCacheDataSource
     ): ArtistRepository {
+
         return ArtistRepositoryImpl(
-            artistCacheDataSource,
+            artistRemoteDatasource,
             artistLocalDataSource,
-            artistRemoteDataSource
+            artistCacheDataSource
         )
+
+
     }
 
 }

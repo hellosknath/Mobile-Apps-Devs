@@ -5,18 +5,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.sriidea.udemyandroidlearning.data.model.artist.Artist
-import com.sriidea.udemyandroidlearning.data.model.movie.Movie
 
 @Dao
 interface ArtistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveArtist(artists: List<Artist>)
+    suspend fun saveArtists(artists : List<Artist>)
 
     @Query("DELETE FROM popular_artists")
-    suspend fun deleteAllArtist()
+    suspend fun deleteAllArtists()
 
     @Query("SELECT * FROM popular_artists")
-    suspend fun getAllArtist(): List<Artist>
-
+    suspend fun getArtists():List<Artist>
 }

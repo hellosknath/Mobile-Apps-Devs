@@ -1,5 +1,6 @@
 package com.sriidea.udemyandroidlearning.data.model.movie
 
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -18,4 +19,5 @@ data class Movie(
     val releaseDate: String?,
     @SerializedName("title")
     val title: String?
+
 )

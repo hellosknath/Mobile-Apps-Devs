@@ -1,11 +1,8 @@
 package com.sriidea.udemyandroidlearning.presentation.di.movie
 
-import com.sriidea.udemyandroidlearning.domain.usecase.GetArtistUseCase
 import com.sriidea.udemyandroidlearning.domain.usecase.GetMoviesUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.UpdateArtistUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.UpdateMoviesUseCase
-import com.sriidea.udemyandroidlearning.presentation.artist.ArtistViewModelFactory
-import com.sriidea.udemyandroidlearning.presentation.movies.MovieViewModelFactory
+import com.sriidea.udemyandroidlearning.domain.usecase.UpdateMoviesUsecase
+import com.sriidea.udemyandroidlearning.presentation.movie.MovieViewModelFactory
 import dagger.Module
 import dagger.Provides
 
@@ -15,11 +12,12 @@ class MovieModule {
     @Provides
     fun provideMovieViewModelFactory(
         getMoviesUseCase: GetMoviesUseCase,
-        updateMoviesUseCase: UpdateMoviesUseCase
+        updateMoviesUsecase: UpdateMoviesUsecase
     ): MovieViewModelFactory {
         return MovieViewModelFactory(
             getMoviesUseCase,
-            updateMoviesUseCase
+            updateMoviesUsecase
         )
     }
+
 }

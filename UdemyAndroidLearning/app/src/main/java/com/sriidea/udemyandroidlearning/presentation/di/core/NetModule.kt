@@ -8,14 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetModule(private val baseurl: String) {
+class NetModule(private val baseUrl: String) {
 
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(baseurl)
+            .baseUrl(baseUrl)
             .build()
     }
 
@@ -24,6 +24,5 @@ class NetModule(private val baseurl: String) {
     fun provideTMDBService(retrofit: Retrofit): TMDBService {
         return retrofit.create(TMDBService::class.java)
     }
-
 
 }

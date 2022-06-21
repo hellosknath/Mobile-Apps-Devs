@@ -2,14 +2,12 @@ package com.sriidea.udemyandroidlearning.presentation.artist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sriidea.udemyandroidlearning.domain.usecase.GetArtistUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.GetMoviesUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.UpdateArtistUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.UpdateMoviesUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.GetArtistsUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.UpdateArtistsUseCase
 
 class ArtistViewModelFactory(
-    private val getArtistUseCase: GetArtistUseCase,
-    private val updateArtistUseCase: UpdateArtistUseCase
+    private val getArtistUseCase: GetArtistsUseCase,
+    private val updateArtistUseCase: UpdateArtistsUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ArtistViewModel(getArtistUseCase, updateArtistUseCase) as T

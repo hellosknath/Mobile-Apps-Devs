@@ -7,21 +7,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ArtistLocalDataSourceImpl(private val artistDao: ArtistDao) :
+class ArtistLocalDataSourceImpl(private val artistDao: ArtistDao):
     ArtistLocalDataSource {
-    override suspend fun getArtistFromDb(): List<Artist> {
-        return artistDao.getAllArtist()
+    override suspend fun getArtistsFromDB(): List<Artist> {
+       return artistDao.getArtists()
     }
 
-    override suspend fun saveArtistToDb(artist: List<Artist>) {
+    override suspend fun saveArtistsToDB(artists: List<Artist>) {
         CoroutineScope(Dispatchers.IO).launch {
-            artistDao.saveArtist(artist)
+            artistDao.saveArtists(artists)
         }
     }
 
     override suspend fun clearAll() {
-        CoroutineScope(Dispatchers.IO).launch {
-            artistDao.deleteAllArtist()
-        }
+       CoroutineScope(Dispatchers.IO).launch {
+           artistDao.deleteAllArtists()
+       }
     }
 }

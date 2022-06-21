@@ -2,73 +2,81 @@ package com.sriidea.udemyandroidlearning.data.repository.artist
 
 import android.util.Log
 import com.sriidea.udemyandroidlearning.data.model.artist.Artist
-import com.sriidea.udemyandroidlearning.data.model.artist.ArtistList
 import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistCacheDataSource
 import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistLocalDataSource
-import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistRemoteDataSource
+import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistRemoteDatasource
 import com.sriidea.udemyandroidlearning.domain.repository.ArtistRepository
-import retrofit2.Response
+import java.lang.Exception
 
 class ArtistRepositoryImpl(
-    private val artistCacheDataSource: ArtistCacheDataSource,
+    private val artistRemoteDatasource: ArtistRemoteDatasource,
     private val artistLocalDataSource: ArtistLocalDataSource,
-    private val artistRemoteDataSource: ArtistRemoteDataSource
+    private val artistCacheDataSource: ArtistCacheDataSource
 ) : ArtistRepository {
-    override suspend fun getArtist(): List<Artist>? {
-        return getArtistFromCache()
+    override suspend fun getArtists(): List<Artist>? {
+       return getArtistsFromCache()
     }
 
-    override suspend fun updateArtist(): List<Artist>? {
-        val newListOfMovies = getArtistFromApi()
+    override suspend fun updateArtists(): List<Artist>? {
+        val newListOfArtist = getArtistsFromAPI()
         artistLocalDataSource.clearAll()
-        artistLocalDataSource.saveArtistToDb(newListOfMovies)
-        artistCacheDataSource.saveArtistToCache(newListOfMovies)
-        return newListOfMovies
+        artistLocalDataSource.saveArtistsToDB(newListOfArtist)
+        artistCacheDataSource.saveArtistsToCache(newListOfArtist)
+        return newListOfArtist
     }
 
-    suspend fun getArtistFromApi(): List<Artist> {
+    suspend fun getArtistsFromAPI(): List<Artist> {
         lateinit var artistList: List<Artist>
         try {
-            val response: Response<ArtistList> = artistRemoteDataSource.getArtist()
-            val body: ArtistList? = response.body()
-            if (body != null) {
+            val response = artistRemoteDatasource.getArtists()
+            val body = response.body()
+            if(body!=null){
                 artistList = body.artists
             }
-        } catch (ex: Exception) {
-            Log.d("MYTAG", ex.message.toString())
+        } catch (exception: Exception) {
+            Log.i("MyTag", exception.message.toString())
         }
         return artistList
     }
 
-    suspend fun getArtistFromDb(): List<Artist> {
+    suspend fun getArtistsFromDB():List<Artist>{
         lateinit var artistList: List<Artist>
         try {
-            artistList = artistLocalDataSource.getArtistFromDb()
-        } catch (ex: Exception) {
-            Log.d("MYTAG", ex.message.toString())
+           artistList = artistLocalDataSource.getArtistsFromDB()
+        } catch (exception: Exception) {
+            Log.i("MyTag", exception.message.toString())
         }
-        if (artistList.size > 0) {
+        if(artistList.size>0){
             return artistList
-        } else {
-            artistList = getArtistFromApi()
-            artistLocalDataSource.saveArtistToDb(artistList)
+        }else{
+            artistList= getArtistsFromAPI()
+            artistLocalDataSource.saveArtistsToDB(artistList)
         }
+
         return artistList
     }
 
-    suspend fun getArtistFromCache(): List<Artist> {
+    suspend fun getArtistsFromCache():List<Artist>{
         lateinit var artistList: List<Artist>
         try {
-            artistList = artistCacheDataSource.getArtistFromCache()
-        } catch (ex: Exception) {
-            Log.d("MYTAG", ex.message.toString())
+            artistList =artistCacheDataSource.getArtistsFromCache()
+        } catch (exception: Exception) {
+            Log.i("MyTag", exception.message.toString())
         }
-        if (artistList.size > 0) {
+        if(artistList.size>0){
             return artistList
-        } else {
-            artistList = getArtistFromDb()
-            artistCacheDataSource.saveArtistToCache(artistList)
+        }else{
+            artistList=getArtistsFromDB()
+            artistCacheDataSource.saveArtistsToCache(artistList)
         }
+
         return artistList
     }
+
+
+
+
+
+
+
 }

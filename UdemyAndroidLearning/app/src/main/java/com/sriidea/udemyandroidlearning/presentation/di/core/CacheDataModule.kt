@@ -1,21 +1,20 @@
 package com.sriidea.udemyandroidlearning.presentation.di.core
 
 import com.sriidea.udemyandroidlearning.data.repository.artist.datasource.ArtistCacheDataSource
-import com.sriidea.udemyandroidlearning.data.repository.artist.datasourceImpl.ArtistCacheDatasourceImpl
-import com.sriidea.udemyandroidlearning.data.repository.movies.datasource.MoviesCacheDataSource
-import com.sriidea.udemyandroidlearning.data.repository.movies.datasourceImpl.MovieCacheDataSourceImpl
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.datasource.TvShowCacheDataSource
-import com.sriidea.udemyandroidlearning.data.repository.tvshows.datasourceImpl.TvShowCacheDataSourceImpl
+import com.sriidea.udemyandroidlearning.data.repository.artist.datasourceImpl.ArtistCacheDataSourceImpl
+import com.sriidea.udemyandroidlearning.data.repository.movie.datasource.MovieCacheDataSource
+import com.sriidea.udemyandroidlearning.data.repository.movie.datasourceImpl.MovieCacheDataSourceImpl
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.datasource.TvShowCacheDataSource
+import com.sriidea.udemyandroidlearning.data.repository.tvshow.datasourceImpl.TvShowCacheDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
 class CacheDataModule {
-
     @Singleton
     @Provides
-    fun provideMovieCacheDataSource(): MoviesCacheDataSource {
+    fun provideMovieCacheDataSource(): MovieCacheDataSource {
         return MovieCacheDataSourceImpl()
     }
 
@@ -28,6 +27,8 @@ class CacheDataModule {
     @Singleton
     @Provides
     fun provideArtistCacheDataSource(): ArtistCacheDataSource {
-        return ArtistCacheDatasourceImpl()
+        return ArtistCacheDataSourceImpl()
     }
+
+
 }

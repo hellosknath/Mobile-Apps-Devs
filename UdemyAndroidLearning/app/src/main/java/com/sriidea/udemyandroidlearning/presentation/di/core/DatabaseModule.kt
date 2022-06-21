@@ -5,21 +5,19 @@ import androidx.room.Room
 import com.sriidea.udemyandroidlearning.data.db.ArtistDao
 import com.sriidea.udemyandroidlearning.data.db.MovieDao
 import com.sriidea.udemyandroidlearning.data.db.TMDBDatabase
-import com.sriidea.udemyandroidlearning.data.db.TvShowsDao
+import com.sriidea.udemyandroidlearning.data.db.TvShowDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule {
-
+class DataBaseModule {
     @Singleton
     @Provides
-    fun provideMovieDatabase(context: Context): TMDBDatabase {
-        return Room.databaseBuilder(context, TMDBDatabase::class.java, "tmdbclient")
-            .build()
+    fun provideMovieDataBase(context: Context): TMDBDatabase {
+     return Room.databaseBuilder(context,TMDBDatabase::class.java,"tmdbclient")
+         .build()
     }
-
     @Singleton
     @Provides
     fun provideMovieDao(tmdbDatabase: TMDBDatabase): MovieDao {
@@ -28,8 +26,8 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideTvDao(tmdbDatabase: TMDBDatabase): TvShowsDao {
-        return tmdbDatabase.tvShowsDao()
+    fun provideTvDao(tmdbDatabase: TMDBDatabase): TvShowDao {
+        return tmdbDatabase.tvDao()
     }
 
     @Singleton
@@ -37,4 +35,9 @@ class DatabaseModule {
     fun provideArtistDao(tmdbDatabase: TMDBDatabase): ArtistDao {
         return tmdbDatabase.artistDao()
     }
+
+
+
+
+
 }

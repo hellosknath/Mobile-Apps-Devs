@@ -1,13 +1,15 @@
 package com.sriidea.udemyandroidlearning.data.api
 
+
 import com.sriidea.udemyandroidlearning.data.model.artist.ArtistList
 import com.sriidea.udemyandroidlearning.data.model.movie.MovieList
-import com.sriidea.udemyandroidlearning.data.model.tvshows.TvShowList
+import com.sriidea.udemyandroidlearning.data.model.tvshow.TvShowList
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TMDBService {
+
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query(
@@ -23,9 +25,13 @@ interface TMDBService {
     ): Response<TvShowList>
 
     @GET("person/popular")
-    suspend fun getPopularPerson(
+    suspend fun getPopularArtists(
         @Query(
             "api_key"
         ) apiKey: String
     ): Response<ArtistList>
+
+
+
+
 }
