@@ -7,7 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ArtistLocalDataSourceImpl(private val artistDao: ArtistDao) : ArtistLocalDataSource {
+class ArtistLocalDataSourceImpl(private val artistDao: ArtistDao) :
+    ArtistLocalDataSource {
     override suspend fun getArtistFromDb(): List<Artist> {
         return artistDao.getAllArtist()
     }

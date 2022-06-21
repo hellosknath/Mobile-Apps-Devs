@@ -9,7 +9,6 @@ class ArtistRemoteDataSourceImpl(
     private val apiTMDBService: TMDBService,
     private val apiKey: String
 ) : ArtistRemoteDataSource {
-    override suspend fun getArtist(): Response<ArtistList> {
-        return apiTMDBService.getPopularPerson(apiKey)
-    }
+    override suspend fun getArtist(): Response<ArtistList> =
+        apiTMDBService.getPopularPerson(apiKey)
 }
