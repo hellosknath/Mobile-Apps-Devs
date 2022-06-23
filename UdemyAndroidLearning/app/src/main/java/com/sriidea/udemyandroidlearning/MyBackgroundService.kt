@@ -13,18 +13,22 @@ class MyBackgroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.i(TAG, "Service Stated")
-
+        val name = intent?.getStringExtra(NAME)
+        val marks = intent?.getIntExtra(MARKS, 0)
+        Log.i(MyBackgroundService.TAG, "Your name is $name, and marks: $marks")
         return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? = null
 
     override fun onDestroy() {
-        Log.i(TAG, "Service Destroying...")
+        Log.i(MyBackgroundService.TAG, "Service Destroying...")
         super.onDestroy()
     }
 
     companion object {
         const val TAG = "MYTAG"
+        const val NAME = "NAME"
+        const val MARKS = "Total marks"
     }
 }
