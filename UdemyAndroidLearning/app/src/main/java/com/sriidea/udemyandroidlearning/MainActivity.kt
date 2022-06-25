@@ -2,8 +2,10 @@ package com.sriidea.udemyandroidlearning
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     @Inject
@@ -13,8 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (application as App).dataComponent.inject(this)
-            dataSource.getRemoteData()
+        dataSource.getRemoteData()
 
     }
 }
