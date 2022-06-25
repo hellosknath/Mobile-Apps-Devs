@@ -1,4 +1,4 @@
-package com.sriidea.udemyandroidlearning.domain.usecase
+package com.sriidea.udemyandroidlearning.domain.useCase
 
 import com.sriidea.udemyandroidlearning.data.model.Article
 import com.sriidea.udemyandroidlearning.domain.repository.NewsRepository
