@@ -11,12 +11,8 @@ import retrofit2.Response
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource
 ) : NewsRepository {
-    override suspend fun getNewsHeadLines(): Resource<APIResponse> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getSearchedNews(searchedQuery: String): Resource<APIResponse> {
-        return responseToResource(newsRemoteDataSource.getTopHeadLines())
+    override suspend fun getNewsHeadLines(country: String, page: Int): Resource<APIResponse> {
+        return responseToResource(newsRemoteDataSource.getTopHeadLines(country,page))
     }
 
     private fun responseToResource(response: Response<APIResponse>): Resource<APIResponse> {
@@ -27,6 +23,11 @@ class NewsRepositoryImpl(
         }
         return Resource.Error(response.message())
     }
+
+    override suspend fun getSearchedNews(searchedQuery: String): Resource<APIResponse> {
+        TODO("Not yet implemented")
+    }
+
 
     override suspend fun saveNews(article: Article) {
         TODO("Not yet implemented")
