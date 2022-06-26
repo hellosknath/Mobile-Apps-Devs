@@ -7,11 +7,10 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.data.model.APIResponse
 import com.sriidea.udemyandroidlearning.data.util.Resource
-import com.sriidea.udemyandroidlearning.domain.useCase.GetNewsHeadLinesUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

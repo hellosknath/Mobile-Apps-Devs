@@ -1,4 +1,4 @@
-package com.sriidea.udemyandroidlearning.domain.useCase
+package com.sriidea.udemyandroidlearning.domain.usecase
 
 import com.sriidea.udemyandroidlearning.data.model.APIResponse
 import com.sriidea.udemyandroidlearning.data.util.Resource
