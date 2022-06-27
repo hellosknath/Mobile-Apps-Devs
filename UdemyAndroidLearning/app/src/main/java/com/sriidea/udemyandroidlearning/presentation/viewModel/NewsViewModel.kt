@@ -14,7 +14,7 @@ import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NewViewModel(
+class NewsViewModel(
     private val app: Application,
     private val getNewsHeadLinesUseCase: GetNewsHeadLinesUseCase
 ) : AndroidViewModel(app) {
