@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.sriidea.udemyandroidlearning.R
 import com.sriidea.udemyandroidlearning.databinding.ActivityMainBinding
+import com.sriidea.udemyandroidlearning.presentation.adapter.NewsAdapter
 import com.sriidea.udemyandroidlearning.presentation.viewModel.NewsViewModel
 import com.sriidea.udemyandroidlearning.presentation.viewModel.NewsViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var factory: NewsViewModelFactory
+    @Inject
+    lateinit var newsAdapter: NewsAdapter
+
     lateinit var viewModel: NewsViewModel
 
     private lateinit var binding: ActivityMainBinding
