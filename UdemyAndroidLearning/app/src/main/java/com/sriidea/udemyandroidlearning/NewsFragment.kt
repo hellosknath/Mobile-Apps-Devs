@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,9 @@ import com.sriidea.udemyandroidlearning.databinding.FragmentNewsBinding
 import com.sriidea.udemyandroidlearning.presentation.MainActivity
 import com.sriidea.udemyandroidlearning.presentation.adapter.NewsAdapter
 import com.sriidea.udemyandroidlearning.presentation.viewModel.NewsViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.NullPointerException
 
 class NewsFragment : Fragment() {
@@ -47,17 +51,17 @@ class NewsFragment : Fragment() {
         newsAdapter = (activity as MainActivity).newsAdapter
 
         newsAdapter.setOnItemClickListener {
-                val bundle = Bundle().apply {
-                    putSerializable("selected_article", it)
-                }
+            val bundle = Bundle().apply {
+                putSerializable("selected_article", it)
+            }
             try {
                 findNavController().navigate(R.id.action_newsFragment_to_infoFragment, bundle)
-            }catch (e:NullPointerException){}
-
+            } catch (e: NullPointerException) {
+            }
         }
-
         initRecyclerView()
         viewNewsList()
+        setSearchView()
     }
 
     private fun viewNewsList() {
@@ -99,6 +103,7 @@ class NewsFragment : Fragment() {
                 is Resource.Loading -> {
                     showProgressBar()
                 }
+                else -> {}
             }
         }
     }
@@ -153,6 +158,77 @@ class NewsFragment : Fragment() {
                         " topPosition: $topPosition hasReachedToEnd: $hasReachedToEnd shouldPaginate: $shouldPaginate" +
                         " page: $page"
             )
+        }
+    }
+
+    // searched news
+    private fun setSearchView() {
+        fragmentNewsBinding.svNews.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.searchedNews("us", query.toString(), page)
+                viewSearchedNews()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                MainScope().launch {
+                    delay(3000)
+                    viewModel.searchedNews("us", newText.toString(), page)
+                    viewSearchedNews()
+                }
+
+                return false
+            }
+
+        })
+
+        fragmentNewsBinding.svNews.setOnCloseListener {
+            initRecyclerView()
+            viewNewsList()
+            false
+        }
+    }
+
+    fun viewSearchedNews() {
+        viewModel.searchedNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        Log.i("MYTAG", "viewNewsList: ${it.articles.toList().size}")
+                        if (it.articles.toList().isNotEmpty()) {
+                            newsAdapter.differ.submitList(it.articles.toList())
+
+                            // calculating last page and page number
+                            pages = if (it.totalResults / 20 == 0) {
+                                it.totalResults / 20
+                            } else {
+                                it.totalResults / 20 + 1
+                            }
+                            isLastPage = page == pages
+
+                            Log.i(
+                                "MYTAG", "totalResults: ${it.totalResults} " +
+                                        "isLastPage: $isLastPage page: $page pages: $pages"
+                            )
+
+                        } else {
+                            Toast.makeText(activity, "No News Found!!!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error occurred: $it", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                else -> {}
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.sriidea.udemyandroidlearning.presentation.di
 
 import android.app.Application
 import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.GetSearchedNewsUseCase
 import com.sriidea.udemyandroidlearning.presentation.NewsApp
 import com.sriidea.udemyandroidlearning.presentation.viewModel.NewsViewModelFactory
 import dagger.Module
@@ -18,8 +19,9 @@ class FactoryModule {
     @Singleton
     fun provideNewsViewModelFactory(
         application: Application,
-        getNewsHeadLinesUseCase: GetNewsHeadLinesUseCase
+        getNewsHeadLinesUseCase: GetNewsHeadLinesUseCase,
+        getSearchedNewsUseCase: GetSearchedNewsUseCase
     ): NewsViewModelFactory {
-        return NewsViewModelFactory(application, getNewsHeadLinesUseCase)
+        return NewsViewModelFactory(application, getNewsHeadLinesUseCase, getSearchedNewsUseCase)
     }
 }
