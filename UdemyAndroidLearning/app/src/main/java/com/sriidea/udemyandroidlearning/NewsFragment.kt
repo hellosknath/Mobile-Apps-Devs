@@ -16,6 +16,7 @@ import com.sriidea.udemyandroidlearning.databinding.FragmentNewsBinding
 import com.sriidea.udemyandroidlearning.presentation.MainActivity
 import com.sriidea.udemyandroidlearning.presentation.adapter.NewsAdapter
 import com.sriidea.udemyandroidlearning.presentation.viewModel.NewsViewModel
+import java.lang.NullPointerException
 
 class NewsFragment : Fragment() {
 
@@ -46,10 +47,13 @@ class NewsFragment : Fragment() {
         newsAdapter = (activity as MainActivity).newsAdapter
 
         newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("selected_article", it)
-            }
-            findNavController().navigate(R.id.action_infoFragment_to_newsFragment)
+                val bundle = Bundle().apply {
+                    putSerializable("selected_article", it)
+                }
+            try {
+                findNavController().navigate(R.id.action_newsFragment_to_infoFragment, bundle)
+            }catch (e:NullPointerException){}
+
         }
 
         initRecyclerView()
