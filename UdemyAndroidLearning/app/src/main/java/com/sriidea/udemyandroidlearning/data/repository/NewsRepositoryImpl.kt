@@ -2,6 +2,7 @@ package com.sriidea.udemyandroidlearning.data.repository
 
 import com.sriidea.udemyandroidlearning.data.model.APIResponse
 import com.sriidea.udemyandroidlearning.data.model.Article
+import com.sriidea.udemyandroidlearning.data.repository.dataSource.NewsLocalDataSource
 import com.sriidea.udemyandroidlearning.data.repository.dataSource.NewsRemoteDataSource
 import com.sriidea.udemyandroidlearning.data.util.Resource
 import com.sriidea.udemyandroidlearning.domain.repository.NewsRepository
@@ -9,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class NewsRepositoryImpl(
-    private val newsRemoteDataSource: NewsRemoteDataSource
+    private val newsRemoteDataSource: NewsRemoteDataSource,
+    private val newsLocalDataSource: NewsLocalDataSource
 ) : NewsRepository {
     override suspend fun getNewsHeadLines(country: String, page: Int): Resource<APIResponse> {
         return responseToResource(newsRemoteDataSource.getTopHeadLines(country, page))
@@ -40,7 +42,7 @@ class NewsRepositoryImpl(
 
 
     override suspend fun saveNews(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.saveArticleToDb(article)
     }
 
     override suspend fun deleteNews(article: Article) {

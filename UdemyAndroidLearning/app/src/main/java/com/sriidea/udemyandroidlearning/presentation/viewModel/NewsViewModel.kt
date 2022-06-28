@@ -10,9 +10,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.data.model.APIResponse
+import com.sriidea.udemyandroidlearning.data.model.Article
 import com.sriidea.udemyandroidlearning.data.util.Resource
 import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.GetSavedNewsUseCase
 import com.sriidea.udemyandroidlearning.domain.usecase.GetSearchedNewsUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.SaveNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.http.Query
@@ -20,7 +23,8 @@ import retrofit2.http.Query
 class NewsViewModel(
     private val app: Application,
     private val getNewsHeadLinesUseCase: GetNewsHeadLinesUseCase,
-    private val getSearchedNewsUseCase: GetSearchedNewsUseCase
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
+    private val savedNewsUseCase: SaveNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
@@ -28,7 +32,7 @@ class NewsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             newsHeadLines.postValue(Resource.Loading())
             try {
-                if (getConnectionType(app) != 0) {
+                if (isNetworkAvailable(app)) {
                     val apiResult = getNewsHeadLinesUseCase.execute(country, page)
                     newsHeadLines.postValue(apiResult)
                 } else {
@@ -72,47 +76,12 @@ class NewsViewModel(
 
     }
 
-    // another network check
-    @androidx.annotation.IntRange(from = 0, to = 3)
-    fun getConnectionType(context: Context): Int {
-        var result = 0 // Returns connection type. 0: none; 1: mobile data; 2: wifi; 3: vpn
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            cm?.run {
-                cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                    if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        result = 2
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        result = 1
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
-                        result = 3
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                        result = 4
-                    }
-                }
-            }
-        } else {
-            cm?.run {
-                cm.activeNetworkInfo?.run {
-                    if (type == ConnectivityManager.TYPE_WIFI) {
-                        result = 2
-                    } else if (type == ConnectivityManager.TYPE_MOBILE) {
-                        result = 1
-                    } else if (type == ConnectivityManager.TYPE_VPN) {
-                        result = 3
-                    }
-                }
-            }
-        }
-        return result
-    }
-
     //search
     val searchedNews: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
     fun searchedNews(country: String, searchQuery: String, page: Int) = viewModelScope.launch {
         searchedNews.postValue(Resource.Loading())
         try {
-            if (getConnectionType(app) != 0) {
+            if (isNetworkAvailable(app)) {
                 val response = getSearchedNewsUseCase.execute(country, searchQuery, page)
                 searchedNews.postValue(response)
             } else {
@@ -122,6 +91,11 @@ class NewsViewModel(
             searchedNews.postValue(Resource.Error(e.message.toString()))
         }
 
+    }
+
+    // local data
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        savedNewsUseCase.execute(article)
     }
 
 }

@@ -31,7 +31,7 @@ class InfoFragment : Fragment() {
         binding.webView.apply {
             webViewClient = WebViewClient()
             if (article.url != "")
-                loadUrl(article.url)
+                article.url?.let { loadUrl(it) }
         }
     }
 }
