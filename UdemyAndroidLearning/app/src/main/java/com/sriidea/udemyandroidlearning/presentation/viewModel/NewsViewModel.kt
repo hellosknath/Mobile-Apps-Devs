@@ -8,15 +8,15 @@ import android.os.Build
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.sriidea.udemyandroidlearning.data.model.APIResponse
 import com.sriidea.udemyandroidlearning.data.model.Article
 import com.sriidea.udemyandroidlearning.data.util.Resource
-import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.GetSavedNewsUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.GetSearchedNewsUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.SaveNewsUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.http.Query
 
@@ -24,7 +24,9 @@ class NewsViewModel(
     private val app: Application,
     private val getNewsHeadLinesUseCase: GetNewsHeadLinesUseCase,
     private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
-    private val savedNewsUseCase: SaveNewsUseCase
+    private val savedNewsUseCase: SaveNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
@@ -98,4 +100,15 @@ class NewsViewModel(
         savedNewsUseCase.execute(article)
     }
 
+    // get local data
+    fun getSavedNews() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
+    }
+
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        deleteSavedNewsUseCase.execute(article)
+    }
 }

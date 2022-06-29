@@ -190,45 +190,48 @@ class NewsFragment : Fragment() {
     }
 
     fun viewSearchedNews() {
-        viewModel.searchedNews.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    hideProgressBar()
-                    response.data?.let {
-                        Log.i("MYTAG", "viewNewsList: ${it.articles.toList().size}")
-                        if (it.articles.toList().isNotEmpty()) {
-                            newsAdapter.differ.submitList(it.articles.toList())
+        try {
+            viewModel.searchedNews.observe(viewLifecycleOwner) { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        hideProgressBar()
+                        response.data?.let {
+                            Log.i("MYTAG", "viewNewsList: ${it.articles.toList().size}")
+                            if (it.articles.toList().isNotEmpty()) {
+                                newsAdapter.differ.submitList(it.articles.toList())
 
-                            // calculating last page and page number
-                            pages = if (it.totalResults / 20 == 0) {
-                                it.totalResults / 20
+                                // calculating last page and page number
+                                pages = if (it.totalResults / 20 == 0) {
+                                    it.totalResults / 20
+                                } else {
+                                    it.totalResults / 20 + 1
+                                }
+                                isLastPage = page == pages
+
+                                Log.i(
+                                    "MYTAG", "totalResults: ${it.totalResults} " +
+                                            "isLastPage: $isLastPage page: $page pages: $pages"
+                                )
+
                             } else {
-                                it.totalResults / 20 + 1
+                                Toast.makeText(activity, "No News Found!!!", Toast.LENGTH_SHORT).show()
                             }
-                            isLastPage = page == pages
-
-                            Log.i(
-                                "MYTAG", "totalResults: ${it.totalResults} " +
-                                        "isLastPage: $isLastPage page: $page pages: $pages"
-                            )
-
-                        } else {
-                            Toast.makeText(activity, "No News Found!!!", Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
-                is Resource.Error -> {
-                    hideProgressBar()
-                    response.message?.let {
-                        Toast.makeText(activity, "An error occurred: $it", Toast.LENGTH_SHORT)
-                            .show()
+                    is Resource.Error -> {
+                        hideProgressBar()
+                        response.message?.let {
+                            Toast.makeText(activity, "An error occurred: $it", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
+                    is Resource.Loading -> {
+                        showProgressBar()
+                    }
+                    else -> {}
                 }
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
-                else -> {}
             }
-        }
+        }catch (e: IllegalStateException){}
+
     }
 }

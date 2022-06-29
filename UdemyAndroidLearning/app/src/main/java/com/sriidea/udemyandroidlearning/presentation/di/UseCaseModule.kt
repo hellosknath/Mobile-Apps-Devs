@@ -1,9 +1,7 @@
 package com.sriidea.udemyandroidlearning.presentation.di
 
 import com.sriidea.udemyandroidlearning.domain.repository.NewsRepository
-import com.sriidea.udemyandroidlearning.domain.usecase.GetNewsHeadLinesUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.GetSearchedNewsUseCase
-import com.sriidea.udemyandroidlearning.domain.usecase.SaveNewsUseCase
+import com.sriidea.udemyandroidlearning.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +31,17 @@ class UseCaseModule {
     fun provideSaveNewsUseCase(newsRepository: NewsRepository):
             SaveNewsUseCase {
         return SaveNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSavedNewsUseCase(newsRepository: NewsRepository): GetSavedNewsUseCase {
+        return GetSavedNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteSavedNewsUseCase(newsRepository: NewsRepository): DeleteSavedNewsUseCase {
+        return DeleteSavedNewsUseCase(newsRepository)
     }
 }
