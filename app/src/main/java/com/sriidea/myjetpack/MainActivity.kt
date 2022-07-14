@@ -24,41 +24,92 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color.DarkGray),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Greeting("Android")
-                Greeting("IOS")
-                Greeting("Windows")
-            }
-
+            BoxExample2()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(
-        text = name,
-        fontSize = 20.sp,
-        color = Color.Red,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .background(color = Color.Green)
-            .border(2.dp, color = Color.Red)
-            .padding(10.dp)
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyJetPackTheme {
-        Greeting("Android")
+fun BoxExample(){
+    Box(modifier = Modifier
+        .background(color = Color.Black)
+        .size(180.dp, 300.dp)
+    ){
+        Box(modifier = Modifier
+            .background(color = Color.White)
+            .size(120.dp, 200.dp)
+            .align(alignment = Alignment.Center)
+        ){
+            Text(text = "Hi", modifier = Modifier
+                .align(alignment = Alignment.Center)
+            )
+        }
     }
 }
+
+@Composable
+fun BoxExample2(){
+    Box(modifier = Modifier
+        .background(color = Color.DarkGray)
+        .fillMaxSize()) {
+
+        Text(style = MaterialTheme.typography.h6,
+        modifier = Modifier.background(Color.Yellow)
+            .padding(6.dp)
+            .align(Alignment.TopCenter),
+        text = "TopCenter")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.TopStart),
+            text = "TopStart")
+
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.TopEnd),
+            text = "TopEnd")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.CenterStart),
+            text = "CenterStart")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.Center),
+            text = "Center")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.CenterEnd),
+            text = "CenterEnd")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.BottomStart),
+            text = "BottomStart")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.BottomCenter),
+            text = "BottomCenter")
+
+        Text(style = MaterialTheme.typography.h6,
+            modifier = Modifier.background(Color.Yellow)
+                .padding(6.dp)
+                .align(Alignment.BottomEnd),
+            text = "BottomEnd")
+
+    }
+}
+
+
+
