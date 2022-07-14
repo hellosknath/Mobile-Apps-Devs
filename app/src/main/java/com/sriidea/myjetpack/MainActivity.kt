@@ -24,12 +24,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color.DarkGray),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Greeting("Android")
                 Greeting("IOS")
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String) {
     Text(
-        text = "Hello $name!",
+        text = name,
         fontSize = 20.sp,
         color = Color.Red,
         fontWeight = FontWeight.Bold,
